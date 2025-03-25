@@ -127,7 +127,9 @@ ptf [file] [obj] = Put code you've written to the given file
         exec = Python
         bat = Batch
 gff [file] = Turn the code you've written to the given file's contents
-echo [obj] = Prints given text to the console
+echo [obj] = Displays given text in the console
+zop = Displays the Zen of Python
+ag = Opens Python antigravity comic
 You can run these external commands:
     1. File compiling:
         You can compile any file in any language with this:
@@ -388,6 +390,10 @@ You can run these external commands:
                         if data_codelang == data_lang:
                             data_f.write(data_code[data_i] + "\n")
                     data_f.close()
+        elif data_rawinput == "zop":
+            print("The Zen of Python, by Tim Peters\n\nBeautiful is better than ugly.\nExplicit is better than implicit.\nSimple is better than complex.\nComplex is better than complicated.\nFlat is better than nested.\nSparse is better than dense.\nReadability counts.\nSpecial cases aren't special enough to break the rules.\nAlthough practicality beats purity.\nErrors should never pass silently.\nUnless explicitly silenced.\nIn the face of ambiguity, refuse the temptation to guess.\nThere should be one-- and preferably only one --obvious way to do it.\nAlthough that way may not be obvious at first unless you're Dutch.\nNow is better than never.\nAlthough never is often better than *right* now.\nIf the implementation is hard to explain, it's a bad idea.\nIf the implementation is easy to explain, it may be a good idea.\nNamespaces are one honking great idea -- let's do more of those!")
+        elif data_rawinput == "ag":
+            wopen("https://xkcd.com/353/")
         else:
             try: run(data_list)
             except Exception as e:
