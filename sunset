@@ -128,8 +128,10 @@ ptf [file] [obj] = Put code you've written to the given file
         bat = Batch
 gff [file] = Turn the code you've written to the given file's contents
 echo [obj] = Displays given text in the console
+cmd exe = Opens Windows Command Prompt
 zop = Displays the Zen of Python
 ag = Opens Python antigravity comic
+gh = Opens geohashing comic
 You can run these external commands:
     1. File compiling:
         You can compile any file in any language with this:
@@ -159,6 +161,17 @@ You can run these external commands:
             I can run Batch!
             >>> ver
             Microsoft Windows [Version 10.0.26100.3476]
+It also comes with these Python Standard Library functions pre-installed:
+/*
+from os import system, name, getcwd
+from sys import platform
+from subprocess import call, Popen, PIPE, run
+from webbrowser import open as wopen
+from random import random
+from datetime import datetime
+from calendar import TextCalendar, MONDAY
+from time import sleep
+*/
             """)
         elif data_rawinput == "docs py":
             help()
@@ -193,8 +206,8 @@ You can run these external commands:
                 if data_codelang[data_i] == "bat":
                     print(data_code[data_i])
         elif data_cmd == "a":
-            data_ainput = data_rawinput[2:].split(" ")
-            data_alang = data_ainput[2]
+            data_ainput = data_list[1:3]
+            data_alang = data_ainput[0]
             data_acode = data_ainput[1]
             if data_acode == "uq":
                 while True:
@@ -223,7 +236,7 @@ You can run these external commands:
                 if data_codelang[data_i] == "eval":
                     try: print(eval(data_code[data_i]))
                     except Exception as e: print(e)
-                elif data_codelang[data_i] == "eval":
+                elif data_codelang[data_i] == "exec":
                     try: exec(data_code[data_i])
                     except Exception as e: print(e)
                 elif data_codelang[data_i] == "bat":
@@ -314,19 +327,21 @@ You can run these external commands:
             elif data_shlang == "bat" or data_shlang == "cmd":
                 print(f"Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\nInstall the latest PowerShell for new features and improvements! https://aka.ms/PSWindows\n\n(.venv) PS {getcwd}> ")
         elif data_cmd == "sh":
-            data_ainput = data_rawinput[2:].split(" ")
-            data_alang = data_ainput[2]
+            data_ainput = data_list[1:3]
+            data_alang = data_ainput[0]
             data_acode = data_ainput[1]
             if data_alang == "eval" or data_alang == "exec" or data_alang == "py":
                 print(f'Python 3.8.5 (default, Jul 20 2020, 23:11:29)\n[GCC 9.3.0] on {platform}\nType "help", "copyright", "credits" or "license" for more information.')
-            elif data_alang == "bat" or data_alang == "cmd":
+            elif data_alang == "bat":
                 print(f"Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\nInstall the latest PowerShell for new features and improvements! https://aka.ms/PSWindows\n\n")
             if data_acode == "uq":
                 while True:
                     if data_alang == "eval" or data_alang == "exec" or data_alang == "py":
                         data_coding = input(">>> ")
-                    elif data_alang == "bat" or data_alang == "cmd":
+                    elif data_alang == "bat":
                         data_coding = input(f"(.venv) PS {getcwd}> ")
+                    elif data_alang == "cmd":
+                        system("cmd")
                     if data_coding == "q" or data_coding == "quit" or data_coding == "exit":
                         break
                     else:
@@ -339,8 +354,8 @@ You can run these external commands:
                         elif data_alang == "bat" or data_alang == "cmd":
                             system(data_coding)
             elif data_acode.isnumeric():
-                data_ainput = data_rawinput[2:].split(" ")
-                data_alang = data_ainput[2]
+                data_ainput = data_list[1:3]
+                data_alang = data_ainput[0]
                 data_acode = data_ainput[1]
                 if data_alang == "eval" or data_alang == "exec" or data_alang == "py":
                     print(f'Python 3.8.5 (default, Jul 20 2020, 23:11:29)\n[GCC 9.3.0] on {platform}\nType "help", "copyright", "credits" or "license" for more information.')
@@ -390,10 +405,14 @@ You can run these external commands:
                         if data_codelang == data_lang:
                             data_f.write(data_code[data_i] + "\n")
                     data_f.close()
+        elif data_rawinput == "cmd exe":
+            system("start")
         elif data_rawinput == "zop":
             print("The Zen of Python, by Tim Peters\n\nBeautiful is better than ugly.\nExplicit is better than implicit.\nSimple is better than complex.\nComplex is better than complicated.\nFlat is better than nested.\nSparse is better than dense.\nReadability counts.\nSpecial cases aren't special enough to break the rules.\nAlthough practicality beats purity.\nErrors should never pass silently.\nUnless explicitly silenced.\nIn the face of ambiguity, refuse the temptation to guess.\nThere should be one-- and preferably only one --obvious way to do it.\nAlthough that way may not be obvious at first unless you're Dutch.\nNow is better than never.\nAlthough never is often better than *right* now.\nIf the implementation is hard to explain, it's a bad idea.\nIf the implementation is easy to explain, it may be a good idea.\nNamespaces are one honking great idea -- let's do more of those!")
         elif data_rawinput == "ag":
             wopen("https://xkcd.com/353/")
+        elif data_rawinput == "gh":
+            wopen("https://xkcd.com/426/")
         else:
             try: run(data_list)
             except Exception as e:
@@ -402,6 +421,8 @@ You can run these external commands:
                 except Exception as e: data_err = True
                 try: exec(data_rawinput)
                 except Exception as e: data_err = True
-                if data_err: system(data_rawinput)
+                if data_err:
+                    try: system(data_rawinput)
+                    except Exception as e: print(e)
 else:
     print("SunSet Editor is not compatible with this PC.\nPlease use Windows NT, so it runs Batch as cmd.exe language instead of BASH.")
