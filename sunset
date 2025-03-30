@@ -126,12 +126,22 @@ ptf [file] [obj] = Put code you've written to the given file
         eval = Eval code format
         exec = Python
         bat = Batch
+ins = Inserts code at a specific line of the code you've written
+rep = Replaces code of a specific line of the code you've written
+del = Deletes code of a specific line of the code you've written
 gff [file] = Turn the code you've written to the given file's contents
 echo [obj] = Displays given text in the console
 cmd exe = Opens Windows Command Prompt
+wmic = Opens WMI information shell
 zop = Displays the Zen of Python
 ag = Opens Python antigravity comic
 gh = Opens geohashing comic
+qrsh [lang] = Opens a shell for given language until "q", "quit" or "exit" is written to the console; and quickly runs it as a single code block
+    For [lang]:
+        exec = Python
+        py = Python
+        bat = Batch
+        ps = PowerShell
 You can run these external commands:
     1. File compiling:
         You can compile any file in any language with this:
@@ -386,6 +396,29 @@ from time import sleep
                 for data_i in range(data_sng[data_acode]):
                     data_code.append(input("> "))
                     data_codelang.append(data_alang)
+        elif data_rawinput == "ins":
+            for data_i in range(len(data_code)):
+                print(f"Line {data_i}: {data_code[data_i]}")
+            data_insint = int(input("Insert code at line: "))
+            data_inscode = input("Code to insert: ")
+            data_inslang = input("Its language: (lowercase, one of \"exec\", \"eval\", \"bat\") ")
+            data_inslang = data_inslang.lower()
+            data_code.insert(data_insint, data_inscode)
+            data_codelang.insert(data_insint, data_inslang)
+        elif data_rawinput == "rep":
+            for data_i in range(len(data_code)):
+                print(f"Line {data_i}: {data_code[data_i]}")
+            data_repint = int(input("Replace code of line: "))
+            data_repcode = input("Code to replace with: ")
+            data_replang = input("Its language: (lowercase, one of \"exec\", \"eval\", \"bat\") ")
+            data_replang = data_replang.lower()
+            data_code[data_repint] = data_repcode
+            data_codelang[data_repint] = data_replang
+        elif data_rawinput == "del":
+            for data_i in range(len(data_code)):
+                print(f"Line {data_i}: {data_code[data_i]}")
+            data_delint = int(input("Delete code of line: "))
+            del data_code[data_delint]
         elif data_cmd == "gff":
             data_file = data_data[0]
             with open (data_file, "r") as data_f:
@@ -413,15 +446,29 @@ from time import sleep
             wopen("https://xkcd.com/353/")
         elif data_rawinput == "gh":
             wopen("https://xkcd.com/426/")
+        elif data_cmd == "qrsh":
+            data_lang = data_data[0]
+            data_codeinput = 0
+            data_codeblock = ""
+            while not(data_codeinput == "q" or data_codeinput == "quit" or data_codeinput == "exit"):
+                data_codeinput = input("> ")
+                data_codeblock = f"{data_codeblock}\n{data_codeinput}"
+            if data_lang == "exec" or data_lang == "py":
+                try: exec(data_codeblock)
+                except Exception as e: print(e)
+            if data_lang == "bat" or data_lang == "ps":
+                try: system(data_codeblock)
+                except Exception as e: print(e)
         else:
             try: run(data_list)
             except Exception as e:
-                data_err = False
+                data_err1 = False
+                data_err2 = False
                 try: eval(data_rawinput)
-                except Exception as e: data_err = True
+                except Exception as e: data_err1 = True
                 try: exec(data_rawinput)
-                except Exception as e: data_err = True
-                if data_err:
+                except Exception as e: data_err2 = True
+                if data_err1 and data_err2:
                     try: system(data_rawinput)
                     except Exception as e: print(e)
 else:
