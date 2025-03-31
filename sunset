@@ -148,7 +148,7 @@ You can run these external commands:
         File "file.txt" contents: print("test")
         SS shell: >>> python3 file.txt
         SS Output: test
-        The logic: exec('import subprocess\nsubprocess.run(input(">>> ").split(" "))')
+        The logic: exec('import subprocess\\nsubprocess.run(input(">>> ").split(" "))')
     2. Python code execution and evaluation printing:
         You can run Python codes and print evaluated Python strings:
         SS Shell:
